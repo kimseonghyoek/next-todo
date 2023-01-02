@@ -1,14 +1,18 @@
-import {createGlobalStyle} from 'styled-components';
+import {createGlobalStyle, css} from 'styled-components';
 import reset from 'styled-reset';
 
-const GlobalStyle = createGlobalStyle`
+const globalstyle = css`
   ${reset}
   body {
-    margin: 0;
+    font-family: Noto Sans, Noto Sans KR;
   }
   * {
     box-sizing: border-box;
   }
+`;
+
+const GlobalStyle = createGlobalStyle`
+  ${globalstyle}
 `;
 
 export default GlobalStyle;
