@@ -193,7 +193,7 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
     return colors;
   }, [todos]);
 
-  console.log(todoColorNum2);
+  // console.log(todoColorNum2);
 
   const todo = todoColorNum2;
 
