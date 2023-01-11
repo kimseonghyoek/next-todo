@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "PATCH") {
     try {
+      const todoId = Number(req.query.id);
       console.log(req.query);
       res.statusCode = 200;
       return res.end();

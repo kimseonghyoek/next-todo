@@ -11,4 +11,10 @@ const getList = () => {
   return todos;
 }
 
-export default { getList };
+const exist = ({ id }: { id: number }) => {
+  const todos = getList();
+  const todo = todos.map((todo) => todo.id === id);
+  return todo;
+}
+
+export default { getList, exist };
