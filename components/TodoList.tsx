@@ -4,6 +4,7 @@ import palette from "../styles/palette";
 import { useCallback, useMemo } from "react";
 import TrashCanIcon from "../public/static/svg/trash_can.svg";
 import CheckMarkIcon from "../public/static/svg/check_mark.svg";
+import { checkTodoAPI } from "../lib/api/todos";
 
 interface IProps {
   todos: TodoType[];
@@ -193,9 +194,16 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
     return colors;
   }, [todos]);
 
-  // console.log(todoColorNum2);
-
   const todo = todoColorNum2;
+
+  const checkTodo = async(id: number) => {
+    try {
+      await checkTodoAPI(id);
+      console.log("체크하였습니다.");
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <Container>
@@ -231,7 +239,9 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
                   <TrashCanIcon className="todo-trash-can" onClick={() => {}} />
                   <CheckMarkIcon
                     className="todo-check-mark"
-                    onClick={() => {}}
+                    onClick={() => {
+                      checkTodo(todo.id)
+                    }}
                   />
                 </>
               )}
@@ -239,7 +249,9 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
                 <button
                   type="button"
                   className="todo-button"
-                  onClick={() => {}}
+                  onClick={() => {
+                    checkTodo(todo.id)
+                  }}
                 />
               )}
             </div>

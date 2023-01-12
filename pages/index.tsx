@@ -6,9 +6,11 @@ import { TodoType } from "../types/todo";
 import Axios from 'axios';
 import { getTodosAPI } from "../lib/api/todos";
 
-const todos: TodoType[] = []
+interface IProps {
+  todos: TodoType[]
+}
 
-const app: NextPage = () => {
+const app: NextPage<IProps> = ({ todos }) => {
   return <TodoList todos={todos}/>
 };
 
