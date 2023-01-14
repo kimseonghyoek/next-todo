@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { TodoType } from "../types/todo";
 import palette from "../styles/palette";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import TrashCanIcon from "../public/static/svg/trash_can.svg";
 import CheckMarkIcon from "../public/static/svg/check_mark.svg";
 import { checkTodoAPI } from "../lib/api/todos";
@@ -137,7 +137,9 @@ type ObjectIndexType = {
   [key: string]: number | undefined;
 };
 
+
 const TodoList: React.FC<IProps> = ({ todos }) => {
+    const [localTodos, SetLocalTodos] = useState(todos);
   // const getTodoColorNums = useCallback(() => {
   //   let red = 0;
   //   let orange = 0;
@@ -183,7 +185,7 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
 
   const todoColorNum2 = useMemo(() => {
     const colors: ObjectIndexType = {};
-    todos.forEach((todo) => {
+    localTodos.forEach((todo) => {
       const value = colors[todo.color];
       if (!value) {
         colors[`${todo.color}`] = 1;
@@ -192,24 +194,34 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
       }
     });
     return colors;
-  }, [todos]);
+  }, [localTodos]);
 
   const todo = todoColorNum2;
+
+
 
   const checkTodo = async(id: number) => {
     try {
       await checkTodoAPI(id);
-      console.log("체크하였습니다.");
+      
+      const newTodos = localTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, checked: !todo.checked };
+        }
+        return todo;
+      });
+      SetLocalTodos(newTodos);
     } catch (e) {
       console.log(e);
     }
   }
 
+  
   return (
     <Container>
       <div className="todo-list-header">
         <p className="todo-list-last-todo">
-          남은 todo<span>{todos.length}개</span>
+          남은 todo<span>{localTodos.length}개</span>
         </p>
         <div className="todo-list-header-colors">
           {Object.keys(todo).map((color, index) => (
@@ -221,7 +233,7 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
         </div>
       </div>
       <ul className="todo-list">
-        {todos.map((todo) => (
+        {localTodos.map((todo) => (
           <li className="todo-item" key={todo.id}>
             <div className="todo-left-side">
               <div className={`todo-color-block bg-${todo.color}`} />
