@@ -4,7 +4,7 @@ import palette from "../styles/palette";
 import { useCallback, useMemo, useState } from "react";
 import TrashCanIcon from "../public/static/svg/trash_can.svg";
 import CheckMarkIcon from "../public/static/svg/check_mark.svg";
-import { checkTodoAPI } from "../lib/api/todos";
+import { checkTodoAPI, deletedTodoAPI } from "../lib/api/todos";
 
 interface IProps {
   todos: TodoType[];
@@ -198,8 +198,6 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
 
   const todo = todoColorNum2;
 
-
-
   const checkTodo = async(id: number) => {
     try {
       await checkTodoAPI(id);
@@ -216,6 +214,16 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
     }
   }
 
+  const deletedTodo = async (id: number) => {
+    try {
+      await deletedTodoAPI(id);
+      const newTodos = localTodos.filter((todo) => todo.id !== id);
+      SetLocalTodos(newTodos);
+      console.log("삭제했습니다.")
+    } catch (e) {
+      console.log(e);
+    }
+  }
   
   return (
     <Container>
@@ -248,7 +256,7 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
             <div className="todo-right-side">
               {todo.checked && (
                 <>
-                  <TrashCanIcon className="todo-trash-can" onClick={() => {}} />
+                  <TrashCanIcon className="todo-trash-can" onClick={() => {deletedTodo(todo.id)}} />
                   <CheckMarkIcon
                     className="todo-check-mark"
                     onClick={() => {
